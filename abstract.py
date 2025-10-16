@@ -24,15 +24,6 @@ class Reader(ABC):
         pass
 
 
-    @abstractmethod
-    def _parse_line(self, line: str) -> Record:
-        """
-        Абстрактный метод
-        Определяет, как парсить строку файла в объект Record
-        """
-        pass
-
-
     def close(self):
         pass
 
@@ -86,13 +77,6 @@ class SequenceReader(Reader):
             self.file.close()
             self.file = None
 
-    @abstractmethod
-    def _parse_line(self, line: str) -> SequenceRecord:
-        """
-        Парсит одну строку и возвращает объект SequenceRecord.
-        Реализация зависит от конкретного формата (FASTA/FASTQ).
-        """
-        pass
 
     @abstractmethod
     def get_sequence(self, seq: str, id: str) -> SequenceRecord:
