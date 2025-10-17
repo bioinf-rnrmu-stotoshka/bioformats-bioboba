@@ -22,9 +22,12 @@ class Reader(ABC):
         pass
 
     def close(self):
-        pass
+        if self.file and not self.file.closed:
+            self.file.close()
+            self.file = None
 
     def __enter__(self):
+        self.file = open(self.filepath, "r", encoding="utf-8")
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -98,10 +101,15 @@ class GenomicDataReader(Reader):
         """
         Открывает файл и парсит заголовок при входе в контекст
         """
-        self.file = open(self.filepath, "r", encoding="utf-8")
-        self._is_open = True
-        self._parse_header()
-        return self
+        try:
+            self.file = open(self.filepath, "r", encoding="utf-8")
+            self._parse_header()
+            return self
+        except Exception as e:
+            # если ошибка — аккуратно закрываем файл, чтобы не остался висеть
+            if self.file and not self.file.closed:
+                self.file.close()
+            raise RuntimeError(f"Ошибка при открытии или парсинге файла {self.filepath}: {e}")
 
     @abstractmethod
     def _parse_header(self):
@@ -129,15 +137,14 @@ class GenomicDataReader(Reader):
         pass
 
     @abstractmethod
-    def get_records_in_region(self, chrom: str, start: int, end: int) -> List[Record]:
+    def get_records_in_region(self, chrom: str, start: int, end: int) -> Iterator[Record]:
         """
-        Получить все записи в указанном геномном регионе
-        Аналог bedtools intersect
+        Возвращает записи, попадающие в указанный регион
         """
         pass
 
     @abstractmethod
-    def filter_records(self, **filters) -> List[Record]:
+    def filter_records(self, **filters) -> Iterator[Record]:
         """
         Фильтрация записей по различным критериям
         filters: словарь с критериями фильтрации
@@ -147,23 +154,7 @@ class GenomicDataReader(Reader):
     def get_chromosome_length(self, chrom: str) -> int:
         """Получить длину хромосомы (если доступно из заголовка)"""
         # Базовая реализация, может быть переопределена в дочерних классах
-        return 0
-
-    def get_genomic_range(self) -> Tuple[str, str]:
-        """
-        Возвращает минимальную и максимальную позиции в геноме
-        Возвращает: (min_chrom:min_pos, max_chrom:max_pos)
-        """
-        min_pos = float("inf")
-        max_pos = 0
-        min_chrom = max_chrom = ""
-
-        for record in self.read():
-            # Эта логика будет специфична для каждого типа ридера
-            # и должна быть реализована в дочерних классах
-            pass
-
-        return (f"{min_chrom}:{min_pos}", f"{max_chrom}:{max_pos}")
+        pass
 
     def get_statistics(self) -> Dict[str, any]:
         """
