@@ -7,7 +7,7 @@ class Record:
 
 
     def __repr__(self):
-        return f'<Record id={self.id}'
+        return f'<Record id={self.id}>'
 
 
 class SequenceRecord(Record):
