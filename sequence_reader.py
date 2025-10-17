@@ -55,14 +55,14 @@ class FastaReader(SequenceReader):
             self._seq_count += 1
             self._total_length += len(record.sequence)
 
-    def get_sequence(self, seq_id: str, seq: str) -> SequenceRecord:
+    def _get_sequence(self, seq_id: str, seq: str) -> SequenceRecord:
         """Создаёт объект SequenceRecord, проверяя валидность последовательности."""
         seq = seq.strip().upper()
         if not self.validate_sequence(seq):
             raise ValueError(f"Некорректная последовательность для {seq_id}")
         return SequenceRecord(id=seq_id, sequence=seq)
 
-    def validate_sequence(self, seq: str) -> bool:
+    def _validate_sequence(self, seq: str) -> bool:
         """Проверяет, что последовательность содержит только корректные символы ДНК/белков."""
         allowed_chars = set("ACGTURYKMSWBDHVN-")  # стандартные нуклеотидные символы IUPAC
         return all(base in allowed_chars for base in seq)
