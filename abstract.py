@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Iterator, List, Dict, Tuple
+from typing import Iterator, List, Dict
 from record import Record, SequenceRecord
 from pathlib import Path
 
