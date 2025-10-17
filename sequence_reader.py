@@ -38,7 +38,7 @@ class FastaReader(SequenceReader):
             if line.startswith(">"):
                 # Если уже есть накопленная последовательность — отдать
                 if seq_id is not None:
-                    record = self.get_sequence(seq_id, "".join(seq_lines))
+                    record = self._get_sequence(seq_id, "".join(seq_lines))
                     yield record
                     # учёт статистики
                     self._seq_count += 1
@@ -50,7 +50,7 @@ class FastaReader(SequenceReader):
 
         # Последняя запись
         if seq_id:
-            record = self.get_sequence(seq_id, "".join(seq_lines))
+            record = self._get_sequence(seq_id, "".join(seq_lines))
             yield record
             self._seq_count += 1
             self._total_length += len(record.sequence)
@@ -58,7 +58,7 @@ class FastaReader(SequenceReader):
     def _get_sequence(self, seq_id: str, seq: str) -> SequenceRecord:
         """Создаёт объект SequenceRecord, проверяя валидность последовательности."""
         seq = seq.strip().upper()
-        if not self.validate_sequence(seq):
+        if not self._validate_sequence(seq):
             raise ValueError(f"Некорректная последовательность для {seq_id}")
         return SequenceRecord(id=seq_id, sequence=seq)
 
