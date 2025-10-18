@@ -75,7 +75,7 @@ class GenomicDataReader(Reader):
     def __init__(self, filepath: str | Path):
         super().__init__(filepath)
         self._header_parsed = False
-        self._stats_cache = None
+        self._chromosomes = []
 
     def __enter__(self):
         """
@@ -136,36 +136,20 @@ class GenomicDataReader(Reader):
         # Базовая реализация, может быть переопределена в дочерних классах
         pass
 
-    def _ensure_stats_calculated(self):
-        """Вычисляет статистику один раз при первом обращении"""
-        if self._stats_cache is not None:
-            return
-            
-        self._stats_cache = {
-            'chromosomes': set(),
-            'total_count': 0,
-            'chromosome_counts': {},
-        }
-        
-        for record in self.read():
-            self._stats_cache['total_count'] += 1
-            if hasattr(record, 'chrom') and record.chrom and record.chrom != "*":
-                self._stats_cache['chromosomes'].add(record.chrom)
-                self._stats_cache['chromosome_counts'][record.chrom] = \
-                    self._stats_cache['chromosome_counts'].get(record.chrom, 0) + 1
 
     def get_statistics(self) -> Dict[str, any]:
-        self._ensure_stats_calculated()
+        """
+        Базовая статистика по файлу
+        Должна быть расширена в дочерних классах
+        """
         return {
             "file_path": str(self.filepath),
             "file_size": self.filepath.stat().st_size if self.filepath.exists() else 0,
-            "chromosomes": sorted(self._stats_cache['chromosomes']),
-            "total_count": self._stats_cache['total_count'],
-            "chromosome_counts": self._stats_cache['chromosome_counts'],
+            "chromosomes": self.get_chromosomes(),
+            "chromosome_count": len(self.get_chromosomes()),
         }
-    
+
     def close(self):
         """Закрывает файл"""
         super().close()
         self._header_parsed = False
-
