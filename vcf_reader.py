@@ -13,8 +13,6 @@ class VcfReader(GenomicDataReader):
         self.column_header: List[str] = []
 
     def _parse_header(self):
-        if not self.file:
-            self.file = open(self.filepath, "r", encoding="utf-8", errors="replace")
 
         pos = self.file.tell()
         for line in self.file:
@@ -29,8 +27,6 @@ class VcfReader(GenomicDataReader):
         return self.header_lines
 
     def read(self) -> Iterator[VariantRecord]:
-        if not self.file:
-            self.file = open(self.filepath, "r", encoding="utf-8", errors="replace")
 
         for line in self.file:
             if line.startswith("#"):
@@ -50,9 +46,7 @@ class VcfReader(GenomicDataReader):
 
             info = self._parse_info(info_str)
 
-            # УБРАН параметр 'id' - используем только те, что есть в VariantRecord
             rec = VariantRecord(chrom=chrom, pos=pos, ref=ref, alt=alt, info=info)
-            # Добавляем остальные поля как атрибуты
             rec.qual = qual
             rec.filter = filter_
             yield rec
@@ -182,4 +176,5 @@ class VcfReader(GenomicDataReader):
         for rec in self.read():
             if hasattr(rec, 'qual') and rec.qual >= min_qual:
                 yield rec
+
 
