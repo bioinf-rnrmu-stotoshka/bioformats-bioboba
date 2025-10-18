@@ -75,7 +75,6 @@ class GenomicDataReader(Reader):
     def __init__(self, filepath: str | Path):
         super().__init__(filepath)
         self._header_parsed = False
-        self._chromosomes = []
 
     def __enter__(self):
         """
@@ -106,50 +105,8 @@ class GenomicDataReader(Reader):
         """
         pass
 
-    @abstractmethod
-    def get_chromosomes(self) -> List[str]:
-        """Возвращает список хромосом"""
-        pass
-
-    @abstractmethod
-    def validate_coordinate(self, chrom: str, pos: int) -> bool:
-        """Проверяет корректность координат"""
-        pass
-
-    @abstractmethod
-    def get_records_in_region(self, chrom: str, start: int, end: int) -> Iterator[Record]:
-        """
-        Возвращает записи, попадающие в указанный регион
-        """
-        pass
-
-    @abstractmethod
-    def filter_records(self, **filters) -> Iterator[Record]:
-        """
-        Фильтрация записей по различным критериям
-        filters: словарь с критериями фильтрации
-        """
-        pass
-
-    def get_chromosome_length(self, chrom: str) -> int:
-        """Получить длину хромосомы (если доступно из заголовка)"""
-        # Базовая реализация, может быть переопределена в дочерних классах
-        pass
-
-
-    def get_statistics(self) -> Dict[str, any]:
-        """
-        Базовая статистика по файлу
-        Должна быть расширена в дочерних классах
-        """
-        return {
-            "file_path": str(self.filepath),
-            "file_size": self.filepath.stat().st_size if self.filepath.exists() else 0,
-            "chromosomes": self.get_chromosomes(),
-            "chromosome_count": len(self.get_chromosomes()),
-        }
-
     def close(self):
         """Закрывает файл"""
         super().close()
         self._header_parsed = False
+
