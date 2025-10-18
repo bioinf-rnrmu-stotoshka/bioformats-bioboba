@@ -1,55 +1,37 @@
+from pathlib import Path
 from sam_reader import SamReader
-from vcf_reader import VcfReader
 
+# === 1. Открываем SAM-файл ===
+sam_path = Path("team-project/Col0_C1.100k.sam")
+with SamReader(sam_path) as reader:
+    # Автоматически разбираем заголовок
+    reader._parse_header()
 
-def test_sam(file_path):
-    """Быстрая проверка SAM ридера"""
-    print("Testing SAM reader...")
-    try:
-        with SamReader(file_path) as reader:
-            # Базовые методы
-            header = reader.get_header()
-            count = reader.count_alignments()
-            chroms = reader.get_chromosomes()
+    # === 2. Получаем и выводим заголовок ===
+    print("\n=== Заголовки SAM-файла ===")
+    header = reader.get_header()
+    for tag, entries in header.items():
+        print(f"{tag}:")
+        # Убираем дубликаты и сортируем
+        for line in sorted(set(entries)):
+            print(f"  {line}")
 
-            print(f"Header: {len(header)} lines")
-            print(f"Alignments: {count}")
-            print(f"Chromosomes: {chroms[:3]}")  # первые 3
+    # === 3. Получаем количество выравниваний ===
+    total = reader.count_alignments()
+    print(f"\n=== Общее количество выравниваний: {total}")
 
-            for rec in reader.read():
-                print(f"First record: {rec.chrom}:{rec.start}")
-                break
+    # === 4. Статистика по хромосомам ===
+    print("\n=== Статистика по хромосомам ===")
+    df_stats = reader.stats_by_chromosome()
+    print(df_stats)
 
-    except Exception as e:
-        print(f"SAM Error: {e}")
+    # === 5. Получаем выравнивания в определённом регионе ===
+    # Используем реальные имена хромосом из заголовка (@SQ SN:XXX)
+    # Например, если в заголовке есть SN:1, используем chrom="1"
+    chrom = "1"
+    start = 10000
+    end = 20000
 
-
-def test_vcf(file_path):
-    """Быстрая проверка VCF ридера"""
-    print("\nTesting VCF reader...")
-    try:
-        with VcfReader(file_path) as reader:
-            # Базовые методы
-            header = reader.get_header()
-            count = reader.count_variants()
-            chroms = reader.get_chromosomes()
-
-            print(f"Header: {len(header)} lines")
-            print(f"Variants: {count}")
-            print(f"Chromosomes: {chroms[:3]}")  # первые 3
-
-            # Первая запись
-            for rec in reader.read():
-                print(f"First record: {rec.chrom}:{rec.pos} {rec.ref}>{rec.alt}")
-                break
-
-    except Exception as e:
-        print(f"VCF Error: {e}")
-
-
-if __name__ == "__main__":
-    sam_file = "team-project/Col0_C1.100k.sam"
-    vcf_file = "team-project/HG00098.vcf"
-
-    test_sam(sam_file)
-    test_vcf(vcf_file)
+    print(f"\n=== Выравнивания в регионе {chrom}:{start}-{end} ===")
+    for rec in reader.filter_by_region(chrom, start, end):
+        print(f"{rec.id}\t{rec.chrom}\t{rec.start}\t{rec.end}\t{rec.cigar}")
