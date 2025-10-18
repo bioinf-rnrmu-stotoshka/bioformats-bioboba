@@ -1,4 +1,3 @@
-# test_run.py
 from sam_reader import SamReader
 from vcf_reader import VcfReader
 
