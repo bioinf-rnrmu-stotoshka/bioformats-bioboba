@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Iterator, List, Dict, Tuple
+from typing import Iterator, List, Dict
 from record import Record, SequenceRecord
 from pathlib import Path
 
@@ -27,7 +27,7 @@ class Reader(ABC):
             self.file = None
 
     def __enter__(self):
-        self.file = open(self.filepath, "r", encoding="utf-8")
+        self.file = open(self.filepath, "r")
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -50,29 +50,9 @@ class SequenceReader(Reader):
         """
         pass
 
-    def __enter__(self):
-        """
-        Открывает файл при входе в блок with
-        """
-        self.file = open(self.filepath, "r", encoding="utf-8")
-        return self
-
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        """
-        Автоматически закрывает файл при выходе из блока 'with'.
-        """
-        self.close()
-
-    def close(self):
-        """
-        Закрывает открытый файл (если он был открыт).
-        """
-        if self.file and not self.file.closed:
-            self.file.close()
-            self.file = None
 
     @abstractmethod
-    def get_sequence(self, seq: str, id: str) -> SequenceRecord:
+    def _get_sequence(self, seq_id: str, seq: str) -> SequenceRecord:
         """
         Создаёт объект SequenceRecord из идентификатора и последовательности.
         Может добавлять качество (в FASTQ) или пропускать его (в FASTA).
@@ -80,7 +60,7 @@ class SequenceReader(Reader):
         pass
 
     @abstractmethod
-    def validate_sequence(self, seq: str) -> bool:
+    def _validate_sequence(self, seq: str) -> bool:
         """
         Проверяет корректность последовательности
         """
@@ -95,14 +75,14 @@ class GenomicDataReader(Reader):
     def __init__(self, filepath: str | Path):
         super().__init__(filepath)
         self._header_parsed = False
-        self._chromosomes = []
+        self._stats_cache = None
 
     def __enter__(self):
         """
         Открывает файл и парсит заголовок при входе в контекст
         """
         try:
-            self.file = open(self.filepath, "r", encoding="utf-8")
+            self.file = open(self.filepath, "r")
             self._parse_header()
             return self
         except Exception as e:
@@ -156,18 +136,34 @@ class GenomicDataReader(Reader):
         # Базовая реализация, может быть переопределена в дочерних классах
         pass
 
+    def _ensure_stats_calculated(self):
+        """Вычисляет статистику один раз при первом обращении"""
+        if self._stats_cache is not None:
+            return
+            
+        self._stats_cache = {
+            'chromosomes': set(),
+            'total_count': 0,
+            'chromosome_counts': {},
+        }
+        
+        for record in self.read():
+            self._stats_cache['total_count'] += 1
+            if hasattr(record, 'chrom') and record.chrom and record.chrom != "*":
+                self._stats_cache['chromosomes'].add(record.chrom)
+                self._stats_cache['chromosome_counts'][record.chrom] = \
+                    self._stats_cache['chromosome_counts'].get(record.chrom, 0) + 1
+
     def get_statistics(self) -> Dict[str, any]:
-        """
-        Базовая статистика по файлу
-        Должна быть расширена в дочерних классах
-        """
+        self._ensure_stats_calculated()
         return {
             "file_path": str(self.filepath),
             "file_size": self.filepath.stat().st_size if self.filepath.exists() else 0,
-            "chromosomes": self.get_chromosomes(),
-            "chromosome_count": len(self.get_chromosomes()),
+            "chromosomes": sorted(self._stats_cache['chromosomes']),
+            "total_count": self._stats_cache['total_count'],
+            "chromosome_counts": self._stats_cache['chromosome_counts'],
         }
-
+    
     def close(self):
         """Закрывает файл"""
         super().close()
