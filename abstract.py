@@ -51,22 +51,6 @@ class SequenceReader(Reader):
         pass
 
 
-    @abstractmethod
-    def _get_sequence(self, seq_id: str, seq: str) -> SequenceRecord:
-        """
-        Создаёт объект SequenceRecord из идентификатора и последовательности.
-        Может добавлять качество (в FASTQ) или пропускать его (в FASTA).
-        """
-        pass
-
-    @abstractmethod
-    def _validate_sequence(self, seq: str) -> bool:
-        """
-        Проверяет корректность последовательности
-        """
-        pass
-
-
 class GenomicDataReader(Reader):
     """
     Абстрактный класс для ридеров геномных данных (SAM, VCF)
@@ -75,7 +59,7 @@ class GenomicDataReader(Reader):
     def __init__(self, filepath: str | Path):
         super().__init__(filepath)
         self._header_parsed = False
-        self._stats_cache = None
+        self._chromosomes = []
 
     def __enter__(self):
         """
@@ -110,12 +94,7 @@ class GenomicDataReader(Reader):
     def get_chromosomes(self) -> List[str]:
         """Возвращает список хромосом"""
         pass
-
-    @abstractmethod
-    def validate_coordinate(self, chrom: str, pos: int) -> bool:
-        """Проверяет корректность координат"""
-        pass
-
+ 
     @abstractmethod
     def get_records_in_region(self, chrom: str, start: int, end: int) -> Iterator[Record]:
         """
@@ -123,47 +102,25 @@ class GenomicDataReader(Reader):
         """
         pass
 
-    @abstractmethod
-    def filter_records(self, **filters) -> Iterator[Record]:
-        """
-        Фильтрация записей по различным критериям
-        filters: словарь с критериями фильтрации
-        """
-        pass
+  
 
     def get_chromosome_length(self, chrom: str) -> int:
         """Получить длину хромосомы (если доступно из заголовка)"""
         # Базовая реализация, может быть переопределена в дочерних классах
         pass
 
-    def _ensure_stats_calculated(self):
-        """Вычисляет статистику один раз при первом обращении"""
-        if self._stats_cache is not None:
-            return
-            
-        self._stats_cache = {
-            'chromosomes': set(),
-            'total_count': 0,
-            'chromosome_counts': {},
-        }
-        
-        for record in self.read():
-            self._stats_cache['total_count'] += 1
-            if hasattr(record, 'chrom') and record.chrom and record.chrom != "*":
-                self._stats_cache['chromosomes'].add(record.chrom)
-                self._stats_cache['chromosome_counts'][record.chrom] = \
-                    self._stats_cache['chromosome_counts'].get(record.chrom, 0) + 1
-
     def get_statistics(self) -> Dict[str, any]:
-        self._ensure_stats_calculated()
+        """
+        Базовая статистика по файлу
+        Должна быть расширена в дочерних классах
+        """
         return {
             "file_path": str(self.filepath),
             "file_size": self.filepath.stat().st_size if self.filepath.exists() else 0,
-            "chromosomes": sorted(self._stats_cache['chromosomes']),
-            "total_count": self._stats_cache['total_count'],
-            "chromosome_counts": self._stats_cache['chromosome_counts'],
+            "chromosomes": self.get_chromosomes(),
+            "chromosome_count": len(self.get_chromosomes()),
         }
-    
+
     def close(self):
         """Закрывает файл"""
         super().close()
