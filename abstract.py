@@ -51,22 +51,6 @@ class SequenceReader(Reader):
         pass
 
 
-    @abstractmethod
-    def _get_sequence(self, seq_id: str, seq: str) -> SequenceRecord:
-        """
-        Создаёт объект SequenceRecord из идентификатора и последовательности.
-        Может добавлять качество (в FASTQ) или пропускать его (в FASTA).
-        """
-        pass
-
-    @abstractmethod
-    def _validate_sequence(self, seq: str) -> bool:
-        """
-        Проверяет корректность последовательности
-        """
-        pass
-
-
 class GenomicDataReader(Reader):
     """
     Абстрактный класс для ридеров геномных данных (SAM, VCF)
