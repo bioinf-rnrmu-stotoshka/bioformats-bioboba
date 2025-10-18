@@ -32,8 +32,14 @@ class AlignmentRecord(Record):
         self.start = start
         self.cigar = cigar
         self.mapq = mapq
+        self.end: int = start
+        self.flag: int = 0
 
-
+    def __repr__(self):
+        return (
+            f"<AlignmentRecord id={self.id}, {self.chrom}:{self.start}-{self.end}, "
+            f"MAPQ={self.mapq}, FLAG={self.flag}>"
+        )
 class VariantRecord(Record):
     """
     Для VCF
@@ -46,3 +52,6 @@ class VariantRecord(Record):
         self.ref = ref
         self.alt = alt
         self.info = info
+
+    def __repr__(self):
+        return f"<VariantRecord {self.chrom}:{self.pos} {self.ref}>{self.alt}>"
