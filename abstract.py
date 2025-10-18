@@ -102,25 +102,7 @@ class GenomicDataReader(Reader):
         """
         pass
 
-  
-
-    def get_chromosome_length(self, chrom: str) -> int:
-        """Получить длину хромосомы (если доступно из заголовка)"""
-        # Базовая реализация, может быть переопределена в дочерних классах
-        pass
-
-    def get_statistics(self) -> Dict[str, any]:
-        """
-        Базовая статистика по файлу
-        Должна быть расширена в дочерних классах
-        """
-        return {
-            "file_path": str(self.filepath),
-            "file_size": self.filepath.stat().st_size if self.filepath.exists() else 0,
-            "chromosomes": self.get_chromosomes(),
-            "chromosome_count": len(self.get_chromosomes()),
-        }
-
+ 
     def close(self):
         """Закрывает файл"""
         super().close()
