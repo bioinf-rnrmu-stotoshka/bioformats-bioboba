@@ -4,7 +4,32 @@ from typing import Dict, List
 from fastq_reader import FastqReader
 
 
-def analyze_fastq(file_path: str | Path):
+def analyze_fastq(file_path: str | Path) -> None:
+    """
+    Анализирует FASTQ-файл и визуализирует ключевые метрики качества последовательностей.
+
+    Функция выполняет следующие действия:
+        - Проверяет существование и непустоту файла.
+        - Собирает статистику по:
+            * длине последовательностей,
+            * среднему качеству по позициям (Phred score),
+            * содержанию нуклеотидов (A, T, G, C) по позициям.
+        - Выводит текстовую сводку в консоль.
+        - Строит три графика:
+            1. Распределение длин последовательностей.
+            2. Среднее качество по каждой позиции в риде.
+            3. Процентное содержание каждого нуклеотида по позициям.
+
+    Args:
+        file_path (str | Path): Путь к FASTQ-файлу для анализа.
+
+    Raises:
+        FileNotFoundError: Если указанный файл не существует.
+        RuntimeError: Если возникает ошибка при чтении файла (через FastqReader).
+
+    Returns:
+        None
+    """
     file_path = Path(file_path)
     if not file_path.exists():
         raise FileNotFoundError(f"File not found: {file_path}")
