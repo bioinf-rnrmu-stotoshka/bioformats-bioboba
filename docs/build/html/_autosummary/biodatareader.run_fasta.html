@@ -1,0 +1,165 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>biodatareader.run_fasta &mdash; документация BioDataReader v1.0.0</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=18e4fad8"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=cd1d70c9"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+    <link rel="next" title="biodatareader.run_fastq" href="biodatareader.run_fastq.html" />
+    <link rel="prev" title="biodatareader.record" href="biodatareader.record.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            BioDataReader
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.abstract.html">biodatareader.abstract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.analyze_fastq.html">biodatareader.analyze_fastq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.fasta_reader.html">biodatareader.fasta_reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.fastq_reader.html">biodatareader.fastq_reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.record.html">biodatareader.record</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">biodatareader.run_fasta</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#biodatareader.run_fasta.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.run_fastq.html">biodatareader.run_fastq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.run_sam.html">biodatareader.run_sam</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.run_vcf.html">biodatareader.run_vcf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.sam_reader.html">biodatareader.sam_reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.vcf_reader.html">biodatareader.vcf_reader</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BioDataReader</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API Reference</a></li>
+      <li class="breadcrumb-item active">biodatareader.run_fasta</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/biodatareader.run_fasta.rst.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-biodatareader.run_fasta">
+<span id="biodatareader-run-fasta"></span><h1>biodatareader.run_fasta<a class="headerlink" href="#module-biodatareader.run_fasta" title="Ссылка на этот заголовок"></a></h1>
+<p class="rubric">Functions</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#biodatareader.run_fasta.main" title="biodatareader.run_fasta.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>()</p></td>
+<td><p>Основная функция демонстрационного скрипта для анализа FASTA-файлов.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py function">
+<dt class="sig sig-object py" id="biodatareader.run_fasta.main">
+<span class="sig-prename descclassname"><span class="pre">biodatareader.run_fasta.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/run_fasta.html#main"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.run_fasta.main" title="Ссылка на это определение"></a></dt>
+<dd><p>Основная функция демонстрационного скрипта для анализа FASTA-файлов.</p>
+<p>Скрипт принимает ровно один аргумент командной строки — путь к FASTA-файлу.
+Выполняет следующие действия:
+- Проверяет корректность аргумента и существование файла.
+- Читает все последовательности из файла с помощью FastaReader.
+- Выводит в консоль количество последовательностей и их среднюю длину.</p>
+<p>В случае ошибки (некорректный ввод, отсутствие файла, недопустимые символы
+в последовательности и т.д.) выводит сообщение об ошибке в stderr и завершает
+выполнение с кодом 1.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-obj docutils literal notranslate"><span class="pre">None</span></code></span></p>
+</dd>
+</dl>
+<p class="rubric">Пример</p>
+<p>Запуск из командной строки:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>run_fasta.py<span class="w"> </span>example.fasta
+</pre></div>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Исключение<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>SystemExit</strong> – При неверном количестве аргументов, отсутствии файла
+    или ошибках во время чтения/валидации.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="biodatareader.record.html" class="btn btn-neutral float-left" title="biodatareader.record" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="biodatareader.run_fastq.html" class="btn btn-neutral float-right" title="biodatareader.run_fastq" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Авторские права 2025, BioBoba team. </p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

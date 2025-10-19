@@ -1,0 +1,461 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>biodatareader.record &mdash; документация BioDataReader v1.0.0</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=18e4fad8"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=cd1d70c9"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+    <link rel="next" title="biodatareader.run_fasta" href="biodatareader.run_fasta.html" />
+    <link rel="prev" title="biodatareader.fastq_reader" href="biodatareader.fastq_reader.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            BioDataReader
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.abstract.html">biodatareader.abstract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.analyze_fastq.html">biodatareader.analyze_fastq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.fasta_reader.html">biodatareader.fasta_reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.fastq_reader.html">biodatareader.fastq_reader</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">biodatareader.record</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#biodatareader.record.Record"><code class="docutils literal notranslate"><span class="pre">Record</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.Record.id"><code class="docutils literal notranslate"><span class="pre">Record.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.Record.__init__"><code class="docutils literal notranslate"><span class="pre">Record.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#biodatareader.record.SequenceRecord"><code class="docutils literal notranslate"><span class="pre">SequenceRecord</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.SequenceRecord.id"><code class="docutils literal notranslate"><span class="pre">SequenceRecord.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.SequenceRecord.sequence"><code class="docutils literal notranslate"><span class="pre">SequenceRecord.sequence</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.SequenceRecord.quality"><code class="docutils literal notranslate"><span class="pre">SequenceRecord.quality</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.SequenceRecord.__init__"><code class="docutils literal notranslate"><span class="pre">SequenceRecord.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#biodatareader.record.AlignmentRecord"><code class="docutils literal notranslate"><span class="pre">AlignmentRecord</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.AlignmentRecord.id"><code class="docutils literal notranslate"><span class="pre">AlignmentRecord.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.AlignmentRecord.chrom"><code class="docutils literal notranslate"><span class="pre">AlignmentRecord.chrom</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.AlignmentRecord.start"><code class="docutils literal notranslate"><span class="pre">AlignmentRecord.start</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.AlignmentRecord.end"><code class="docutils literal notranslate"><span class="pre">AlignmentRecord.end</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.AlignmentRecord.cigar"><code class="docutils literal notranslate"><span class="pre">AlignmentRecord.cigar</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.AlignmentRecord.mapq"><code class="docutils literal notranslate"><span class="pre">AlignmentRecord.mapq</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.AlignmentRecord.flag"><code class="docutils literal notranslate"><span class="pre">AlignmentRecord.flag</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.AlignmentRecord.__init__"><code class="docutils literal notranslate"><span class="pre">AlignmentRecord.__init__()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#biodatareader.record.VariantRecord"><code class="docutils literal notranslate"><span class="pre">VariantRecord</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.VariantRecord.id"><code class="docutils literal notranslate"><span class="pre">VariantRecord.id</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.VariantRecord.chrom"><code class="docutils literal notranslate"><span class="pre">VariantRecord.chrom</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.VariantRecord.pos"><code class="docutils literal notranslate"><span class="pre">VariantRecord.pos</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.VariantRecord.ref"><code class="docutils literal notranslate"><span class="pre">VariantRecord.ref</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.VariantRecord.alt"><code class="docutils literal notranslate"><span class="pre">VariantRecord.alt</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.VariantRecord.info"><code class="docutils literal notranslate"><span class="pre">VariantRecord.info</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.record.VariantRecord.__init__"><code class="docutils literal notranslate"><span class="pre">VariantRecord.__init__()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.run_fasta.html">biodatareader.run_fasta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.run_fastq.html">biodatareader.run_fastq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.run_sam.html">biodatareader.run_sam</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.run_vcf.html">biodatareader.run_vcf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.sam_reader.html">biodatareader.sam_reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.vcf_reader.html">biodatareader.vcf_reader</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BioDataReader</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API Reference</a></li>
+      <li class="breadcrumb-item active">biodatareader.record</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/biodatareader.record.rst.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-biodatareader.record">
+<span id="biodatareader-record"></span><h1>biodatareader.record<a class="headerlink" href="#module-biodatareader.record" title="Ссылка на этот заголовок"></a></h1>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#biodatareader.record.AlignmentRecord" title="biodatareader.record.AlignmentRecord"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AlignmentRecord</span></code></a>(id, chrom, start, cigar, mapq)</p></td>
+<td><p>Класс для представления выравнивания рида на референсный геном (формат SAM/BAM).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#biodatareader.record.Record" title="biodatareader.record.Record"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Record</span></code></a>(id)</p></td>
+<td><p>Базовый класс для представления биологических записей.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#biodatareader.record.SequenceRecord" title="biodatareader.record.SequenceRecord"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SequenceRecord</span></code></a>(id, sequence[, quality])</p></td>
+<td><p>Класс для представления последовательностей нуклеотидов или аминокислот.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#biodatareader.record.VariantRecord" title="biodatareader.record.VariantRecord"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VariantRecord</span></code></a>(chrom, pos, ref, alt, info)</p></td>
+<td><p>Класс для представления генетического варианта (формат VCF).</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="biodatareader.record.Record">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">biodatareader.record.</span></span><span class="sig-name descname"><span class="pre">Record</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/record.html#Record"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.record.Record" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Базовый класс для представления биологических записей.</p>
+<p>Содержит общий идентификатор записи, который может использоваться
+в различных форматах (FASTA, FASTQ, SAM, VCF и др.).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.record.Record.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#biodatareader.record.Record.id" title="Ссылка на это определение"></a></dt>
+<dd><p>Уникальный идентификатор записи (например, имя последовательности или координата).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.record.Record.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/record.html#Record.__init__"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.record.Record.__init__" title="Ссылка на это определение"></a></dt>
+<dd><p>Инициализирует базовую запись с заданным идентификатором.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>id</strong> (<em>str</em>) – Идентификатор биологической записи.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="biodatareader.record.SequenceRecord">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">biodatareader.record.</span></span><span class="sig-name descname"><span class="pre">SequenceRecord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/record.html#SequenceRecord"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.record.SequenceRecord" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <a class="reference internal" href="#biodatareader.record.Record" title="biodatareader.record.Record"><code class="xref py py-class docutils literal notranslate"><span class="pre">Record</span></code></a></p>
+<p>Класс для представления последовательностей нуклеотидов или аминокислот.</p>
+<p>Используется для хранения данных из FASTA (без качества) и FASTQ (с качеством).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.record.SequenceRecord.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#biodatareader.record.SequenceRecord.id" title="Ссылка на это определение"></a></dt>
+<dd><p>Идентификатор последовательности.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.record.SequenceRecord.sequence">
+<span class="sig-name descname"><span class="pre">sequence</span></span><a class="headerlink" href="#biodatareader.record.SequenceRecord.sequence" title="Ссылка на это определение"></a></dt>
+<dd><p>Биологическая последовательность (например, «ATGCGTA»).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.record.SequenceRecord.quality">
+<span class="sig-name descname"><span class="pre">quality</span></span><a class="headerlink" href="#biodatareader.record.SequenceRecord.quality" title="Ссылка на это определение"></a></dt>
+<dd><p>Список Phred-оценок качества для каждой позиции
+(только для FASTQ). Для FASTA — None.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[int] | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.record.SequenceRecord.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sequence</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">quality</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/record.html#SequenceRecord.__init__"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.record.SequenceRecord.__init__" title="Ссылка на это определение"></a></dt>
+<dd><p>Инициализирует запись последовательности.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – Идентификатор последовательности.</p></li>
+<li><p><strong>sequence</strong> (<em>str</em>) – Строка последовательности (обычно в верхнем регистре).</p></li>
+<li><p><strong>quality</strong> (<em>list</em><em>[</em><em>int</em><em>] </em><em>| </em><em>None</em><em>, </em><em>optional</em>) – Список целочисленных оценок качества.
+По умолчанию None (для FASTA).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="biodatareader.record.AlignmentRecord">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">biodatareader.record.</span></span><span class="sig-name descname"><span class="pre">AlignmentRecord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chrom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cigar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mapq</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/record.html#AlignmentRecord"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.record.AlignmentRecord" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <a class="reference internal" href="#biodatareader.record.Record" title="biodatareader.record.Record"><code class="xref py py-class docutils literal notranslate"><span class="pre">Record</span></code></a></p>
+<p>Класс для представления выравнивания рида на референсный геном (формат SAM/BAM).</p>
+<p>Хранит информацию о положении, качестве и параметрах выравнивания.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.record.AlignmentRecord.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#biodatareader.record.AlignmentRecord.id" title="Ссылка на это определение"></a></dt>
+<dd><p>Идентификатор рида (QNAME в SAM).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.record.AlignmentRecord.chrom">
+<span class="sig-name descname"><span class="pre">chrom</span></span><a class="headerlink" href="#biodatareader.record.AlignmentRecord.chrom" title="Ссылка на это определение"></a></dt>
+<dd><p>Название хромосомы или референсной последовательности (RNAME).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.record.AlignmentRecord.start">
+<span class="sig-name descname"><span class="pre">start</span></span><a class="headerlink" href="#biodatareader.record.AlignmentRecord.start" title="Ссылка на это определение"></a></dt>
+<dd><p>Начальная позиция выравнивания (1-based или 0-based в зависимости от контекста;
+здесь используется 0-based для внутренней логики).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.record.AlignmentRecord.end">
+<span class="sig-name descname"><span class="pre">end</span></span><a class="headerlink" href="#biodatareader.record.AlignmentRecord.end" title="Ссылка на это определение"></a></dt>
+<dd><p>Конечная позиция выравнивания (вычисляется на основе CIGAR, по умолчанию = start).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.record.AlignmentRecord.cigar">
+<span class="sig-name descname"><span class="pre">cigar</span></span><a class="headerlink" href="#biodatareader.record.AlignmentRecord.cigar" title="Ссылка на это определение"></a></dt>
+<dd><p>Строка CIGAR, описывающая операции выравнивания (например, «100M»).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.record.AlignmentRecord.mapq">
+<span class="sig-name descname"><span class="pre">mapq</span></span><a class="headerlink" href="#biodatareader.record.AlignmentRecord.mapq" title="Ссылка на это определение"></a></dt>
+<dd><p>Качество отображения (MAPQ), целое число от 0 до 255.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.record.AlignmentRecord.flag">
+<span class="sig-name descname"><span class="pre">flag</span></span><a class="headerlink" href="#biodatareader.record.AlignmentRecord.flag" title="Ссылка на это определение"></a></dt>
+<dd><p>Флаг выравнивания (битовое поле, по умолчанию 0).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.record.AlignmentRecord.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">chrom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cigar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mapq</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/record.html#AlignmentRecord.__init__"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.record.AlignmentRecord.__init__" title="Ссылка на это определение"></a></dt>
+<dd><p>Инициализирует запись выравнивания.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<em>str</em>) – Идентификатор рида.</p></li>
+<li><p><strong>chrom</strong> (<em>str</em>) – Название хромосомы или референса.</p></li>
+<li><p><strong>start</strong> (<em>int</em>) – Начальная позиция выравнивания (обычно 0-based).</p></li>
+<li><p><strong>cigar</strong> (<em>str</em>) – CIGAR-строка (например, «50M2D30M»).</p></li>
+<li><p><strong>mapq</strong> (<em>int</em>) – Качество отображения (MAPQ score).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="biodatareader.record.VariantRecord">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">biodatareader.record.</span></span><span class="sig-name descname"><span class="pre">VariantRecord</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chrom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/record.html#VariantRecord"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.record.VariantRecord" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <a class="reference internal" href="#biodatareader.record.Record" title="biodatareader.record.Record"><code class="xref py py-class docutils literal notranslate"><span class="pre">Record</span></code></a></p>
+<p>Класс для представления генетического варианта (формат VCF).</p>
+<p>Хранит информацию о положении, референсном и альтернативном аллелях,
+а также дополнительных аннотациях.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.record.VariantRecord.id">
+<span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#biodatareader.record.VariantRecord.id" title="Ссылка на это определение"></a></dt>
+<dd><p>Идентификатор вида «chrom:pos» (например, «chr1:12345»).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.record.VariantRecord.chrom">
+<span class="sig-name descname"><span class="pre">chrom</span></span><a class="headerlink" href="#biodatareader.record.VariantRecord.chrom" title="Ссылка на это определение"></a></dt>
+<dd><p>Название хромосомы.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.record.VariantRecord.pos">
+<span class="sig-name descname"><span class="pre">pos</span></span><a class="headerlink" href="#biodatareader.record.VariantRecord.pos" title="Ссылка на это определение"></a></dt>
+<dd><p>Позиция варианта (1-based, как в VCF).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.record.VariantRecord.ref">
+<span class="sig-name descname"><span class="pre">ref</span></span><a class="headerlink" href="#biodatareader.record.VariantRecord.ref" title="Ссылка на это определение"></a></dt>
+<dd><p>Референсный аллель (например, «A»).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.record.VariantRecord.alt">
+<span class="sig-name descname"><span class="pre">alt</span></span><a class="headerlink" href="#biodatareader.record.VariantRecord.alt" title="Ссылка на это определение"></a></dt>
+<dd><p>Альтернативный аллель (например, «T»).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.record.VariantRecord.info">
+<span class="sig-name descname"><span class="pre">info</span></span><a class="headerlink" href="#biodatareader.record.VariantRecord.info" title="Ссылка на это определение"></a></dt>
+<dd><p>Словарь с дополнительной информацией из поля INFO VCF
+(например, {«DP»: 30, «AF»: 0.5}).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.record.VariantRecord.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chrom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ref</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alt</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">info</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/record.html#VariantRecord.__init__"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.record.VariantRecord.__init__" title="Ссылка на это определение"></a></dt>
+<dd><p>Инициализирует запись генетического варианта.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chrom</strong> (<em>str</em>) – Название хромосомы (например, «chr1»).</p></li>
+<li><p><strong>pos</strong> (<em>int</em>) – Позиция варианта (1-based, как в спецификации VCF).</p></li>
+<li><p><strong>ref</strong> (<em>str</em>) – Референсный аллель.</p></li>
+<li><p><strong>alt</strong> (<em>str</em>) – Альтернативный аллель.</p></li>
+<li><p><strong>info</strong> (<em>dict</em>) – Словарь с аннотациями из поля INFO.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="biodatareader.fastq_reader.html" class="btn btn-neutral float-left" title="biodatareader.fastq_reader" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="biodatareader.run_fasta.html" class="btn btn-neutral float-right" title="biodatareader.run_fasta" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Авторские права 2025, BioBoba team. </p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
