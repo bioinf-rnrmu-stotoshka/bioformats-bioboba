@@ -27,7 +27,7 @@ def main() -> None:
         SystemExit: При неверном количестве аргументов или если файл не найден.
     """
     if len(sys.argv) != 2:
-        print("Использование: python demo.py <путь_к_fastq_файлу>")
+        print("Использование: python run_fastq.py <путь_к_fastq_файлу>")
         sys.exit(1)
 
     file_path = Path(sys.argv[1])
