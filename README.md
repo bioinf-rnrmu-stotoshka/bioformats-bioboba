@@ -13,7 +13,7 @@
 ## Установка
 
 ```bash
-git https://github.com/bioinf-rnrmu-stotoshka/bioformats-bioboba/tree/main/tree/main
+git clone https://github.com/bioinf-rnrmu-stotoshka/bioformats-bioboba.git
 cd bioformats-bioboba
 ```
 
