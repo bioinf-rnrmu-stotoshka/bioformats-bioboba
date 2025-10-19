@@ -21,7 +21,6 @@ var/
 *.egg
 
 # Sphinx
-docs/build/
 docs/_autosummary/
 
 # IDE
