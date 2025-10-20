@@ -280,4 +280,3 @@ make html # для Windows - ./make html
 
 Этот проект распространяется под лицензией MIT.
 
-!(UML_diagramm.png)
