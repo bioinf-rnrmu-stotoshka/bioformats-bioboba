@@ -234,6 +234,13 @@ classDiagram
         +filter_by_region(chrom: str, start: int, end: int) Iterator[VariantRecord]
     }
 
+    
+    %% Analysis function (as a class for diagram purposes)
+    class analyze_fastq {
+        <<function>>
+        +analyze_fastq(file_path: str | Path) None
+    }
+
     %% Inheritance Relationships
     Reader <|-- SequenceReader
     Reader <|-- GenomicDataReader
@@ -252,6 +259,7 @@ classDiagram
     GenomicDataReader --> Record : reads
     SamReader --> AlignmentRecord : reads
     VcfReader --> VariantRecord : reads
+    FastqReader --> analyze_fastq: uses
 ```
 
 
