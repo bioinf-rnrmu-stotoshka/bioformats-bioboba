@@ -1,0 +1,336 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>biodatareader.abstract &mdash; документация BioDataReader v1.0.0</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=18e4fad8"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=cd1d70c9"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            BioDataReader
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BioDataReader</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Код модуля</a></li>
+      <li class="breadcrumb-item active">biodatareader.abstract</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Исходный код biodatareader.abstract</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterator</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.record</span><span class="w"> </span><span class="kn">import</span> <span class="n">Record</span><span class="p">,</span> <span class="n">SequenceRecord</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+
+<div class="viewcode-block" id="Reader">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.abstract.html#biodatareader.abstract.Reader">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Reader</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Абстрактный базовый класс для чтения биологических данных из файлов.</span>
+
+<span class="sd">    Предоставляет общий интерфейс и базовую логику открытия/закрытия файлов,</span>
+<span class="sd">    а также поддержку контекстного менеджера (with-блоков).</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        filepath (Path): Путь к файлу, из которого будут читаться данные.</span>
+<span class="sd">        file (file object or None): Открытый файловый дескриптор или None, если файл закрыт.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Reader.__init__">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.abstract.html#biodatareader.abstract.Reader.__init__">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Инициализирует Reader с указанным путём к файлу.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filepath (str | Path): Путь к файлу в виде строки или объекта pathlib.Path.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">filepath</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="Reader.read">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.abstract.html#biodatareader.abstract.Reader.read">[документация]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Record</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Абстрактный метод для чтения записей из файла.</span>
+
+<span class="sd">        Должен быть реализован в подклассах. Возвращает итератор по объектам типа Record,</span>
+<span class="sd">        представляющим биологические данные (например, последовательности, выравнивания или варианты).</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            Record: Объект записи, содержащий данные из файла.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NotImplementedError: Если метод не переопределён в подклассе.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Reader.close">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.abstract.html#biodatareader.abstract.Reader.close">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Закрывает открытый файл, если он ещё не закрыт.</span>
+
+<span class="sd">        Устанавливает атрибут self.file в None после закрытия.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Поддержка контекстного менеджера (with-блока).</span>
+
+<span class="sd">        Открывает файл в режиме чтения и возвращает экземпляр Reader.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Reader: Текущий экземпляр класса после открытия файла.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc_type</span><span class="p">,</span> <span class="n">exc_val</span><span class="p">,</span> <span class="n">exc_tb</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Завершение работы контекстного менеджера.</span>
+
+<span class="sd">        Автоматически закрывает файл при выходе из with-блока,</span>
+<span class="sd">        независимо от того, произошло ли исключение.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            exc_type (type or None): Тип исключения, если оно возникло.</span>
+<span class="sd">            exc_val (Exception or None): Экземпляр исключения.</span>
+<span class="sd">            exc_tb (traceback or None): Объект трассировки стека.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="SequenceReader">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.abstract.html#biodatareader.abstract.SequenceReader">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SequenceReader</span><span class="p">(</span><span class="n">Reader</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Абстрактный класс для чтения последовательностей (например, FASTA или FASTQ).</span>
+
+<span class="sd">    Наследуется от Reader и специализируется на работе с SequenceRecord.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        filepath (Path): Путь к файлу с последовательностями.</span>
+<span class="sd">        file (file object or None): Открытый файловый дескриптор.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SequenceReader.__init__">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.abstract.html#biodatareader.abstract.SequenceReader.__init__">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Инициализирует SequenceReader с указанным путём к файлу.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filepath (str | Path): Путь к файлу в виде строки или объекта pathlib.Path.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SequenceReader.read">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.abstract.html#biodatareader.abstract.SequenceReader.read">[документация]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">SequenceRecord</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Абстрактный метод для чтения последовательностей из файла.</span>
+
+<span class="sd">        Должен возвращать итератор по объектам SequenceRecord,</span>
+<span class="sd">        каждый из которых содержит идентификатор, последовательность и, возможно, качество (для FASTQ).</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            SequenceRecord: Объект, представляющий одну биологическую последовательность.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NotImplementedError: Если метод не реализован в подклассе.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="GenomicDataReader">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.abstract.html#biodatareader.abstract.GenomicDataReader">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">GenomicDataReader</span><span class="p">(</span><span class="n">Reader</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Абстрактный класс для чтения геномных данных с заголовком (например, SAM, VCF).</span>
+
+<span class="sd">    Поддерживает парсинг заголовка при открытии файла и чтение записей после заголовка.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        filepath (Path): Путь к геномному файлу.</span>
+<span class="sd">        file (file object or None): Открытый файловый дескриптор.</span>
+<span class="sd">        _header_parsed (bool): Флаг, указывающий, был ли уже распарсен заголовок.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="GenomicDataReader.__init__">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.abstract.html#biodatareader.abstract.GenomicDataReader.__init__">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Инициализирует GenomicDataReader с указанным путём к файлу.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filepath (str | Path): Путь к файлу в виде строки или объекта pathlib.Path.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_header_parsed</span> <span class="o">=</span> <span class="kc">False</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Поддержка контекстного менеджера с автоматическим парсингом заголовка.</span>
+
+<span class="sd">        Открывает файл и вызывает метод _parse_header() для обработки заголовочных строк.</span>
+<span class="sd">        В случае ошибки корректно закрывает файл и выбрасывает исключение.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            GenomicDataReader: Текущий экземпляр после успешного открытия и парсинга заголовка.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            RuntimeError: Если произошла ошибка при открытии файла или парсинге заголовка.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parse_header</span><span class="p">()</span>
+            <span class="k">return</span> <span class="bp">self</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="c1"># если ошибка — аккуратно закрываем файл, чтобы не остался висеть</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">closed</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Ошибка при открытии или парсинге файла </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">filepath</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Абстрактный метод для парсинга заголовка геномного файла.</span>
+
+<span class="sd">        Должен быть реализован в подклассах (например, для VCF или SAM).</span>
+<span class="sd">        Обычно читает и обрабатывает строки, начинающиеся с символа &#39;#&#39;.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NotImplementedError: Если метод не реализован в подклассе.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="GenomicDataReader.read">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.abstract.html#biodatareader.abstract.GenomicDataReader.read">[документация]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Record</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Чтение записей из файла после заголовка.</span>
+
+<span class="sd">        Пропускает заголовочные строки и возвращает итератор по объектам Record,</span>
+<span class="sd">        представляющим строки данных (например, выравнивания в SAM или варианты в VCF).</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            Record: Объект записи геномных данных.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            NotImplementedError: Если метод не реализован в подклассе.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="GenomicDataReader.close">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.abstract.html#biodatareader.abstract.GenomicDataReader.close">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Закрывает файл и сбрасывает флаг парсинга заголовка.</span>
+
+<span class="sd">        Вызывает родительский метод close() и дополнительно устанавливает</span>
+<span class="sd">        _header_parsed в False для корректного состояния объекта после закрытия.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_header_parsed</span> <span class="o">=</span> <span class="kc">False</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Авторские права 2025, BioBoba team. </p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,348 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>biodatareader.sam_reader &mdash; документация BioDataReader v1.0.0</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=18e4fad8"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=cd1d70c9"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+    <link rel="next" title="biodatareader.vcf_reader" href="biodatareader.vcf_reader.html" />
+    <link rel="prev" title="biodatareader.run_vcf" href="biodatareader.run_vcf.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            BioDataReader
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.abstract.html">biodatareader.abstract</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.analyze_fastq.html">biodatareader.analyze_fastq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.fasta_reader.html">biodatareader.fasta_reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.fastq_reader.html">biodatareader.fastq_reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.record.html">biodatareader.record</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.run_fasta.html">biodatareader.run_fasta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.run_fastq.html">biodatareader.run_fastq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.run_sam.html">biodatareader.run_sam</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.run_vcf.html">biodatareader.run_vcf</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">biodatareader.sam_reader</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#biodatareader.sam_reader.SamReader"><code class="docutils literal notranslate"><span class="pre">SamReader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.sam_reader.SamReader.filepath"><code class="docutils literal notranslate"><span class="pre">SamReader.filepath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.sam_reader.SamReader.file"><code class="docutils literal notranslate"><span class="pre">SamReader.file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.sam_reader.SamReader._header_parsed"><code class="docutils literal notranslate"><span class="pre">SamReader._header_parsed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.sam_reader.SamReader.header"><code class="docutils literal notranslate"><span class="pre">SamReader.header</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.sam_reader.SamReader.__init__"><code class="docutils literal notranslate"><span class="pre">SamReader.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.sam_reader.SamReader.get_header"><code class="docutils literal notranslate"><span class="pre">SamReader.get_header()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.sam_reader.SamReader.get_header_group"><code class="docutils literal notranslate"><span class="pre">SamReader.get_header_group()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.sam_reader.SamReader.read"><code class="docutils literal notranslate"><span class="pre">SamReader.read()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.sam_reader.SamReader.count_alignments"><code class="docutils literal notranslate"><span class="pre">SamReader.count_alignments()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.sam_reader.SamReader.stats_by_chromosome"><code class="docutils literal notranslate"><span class="pre">SamReader.stats_by_chromosome()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.sam_reader.SamReader.filter_by_region"><code class="docutils literal notranslate"><span class="pre">SamReader.filter_by_region()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.vcf_reader.html">biodatareader.vcf_reader</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BioDataReader</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API Reference</a></li>
+      <li class="breadcrumb-item active">biodatareader.sam_reader</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/biodatareader.sam_reader.rst.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-biodatareader.sam_reader">
+<span id="biodatareader-sam-reader"></span><h1>biodatareader.sam_reader<a class="headerlink" href="#module-biodatareader.sam_reader" title="Ссылка на этот заголовок"></a></h1>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#biodatareader.sam_reader.SamReader" title="biodatareader.sam_reader.SamReader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SamReader</span></code></a>(filepath)</p></td>
+<td><p>Реализация ридера для чтения SAM-файлов (Sequence Alignment/Map).</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="biodatareader.sam_reader.SamReader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">biodatareader.sam_reader.</span></span><span class="sig-name descname"><span class="pre">SamReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/sam_reader.html#SamReader"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.sam_reader.SamReader" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <a class="reference internal" href="biodatareader.abstract.html#biodatareader.abstract.GenomicDataReader" title="biodatareader.abstract.GenomicDataReader"><code class="xref py py-class docutils literal notranslate"><span class="pre">GenomicDataReader</span></code></a></p>
+<p>Реализация ридера для чтения SAM-файлов (Sequence Alignment/Map).</p>
+<dl class="simple">
+<dt>Поддерживает:</dt><dd><ul class="simple">
+<li><p>Парсинг заголовков (строки, начинающиеся с „&#64;“).</p></li>
+<li><p>Итеративное чтение выравниваний как объектов AlignmentRecord.</p></li>
+<li><p>Подсчёт общего числа выравниваний.</p></li>
+<li><p>Сбор статистики по хромосомам с использованием pandas.</p></li>
+<li><p>Фильтрацию выравниваний по геномному региону.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.sam_reader.SamReader.filepath">
+<span class="sig-name descname"><span class="pre">filepath</span></span><a class="headerlink" href="#biodatareader.sam_reader.SamReader.filepath" title="Ссылка на это определение"></a></dt>
+<dd><p>Путь к SAM-файлу.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.sam_reader.SamReader.file">
+<span class="sig-name descname"><span class="pre">file</span></span><a class="headerlink" href="#biodatareader.sam_reader.SamReader.file" title="Ссылка на это определение"></a></dt>
+<dd><p>Открытый файловый дескриптор.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>file object or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.sam_reader.SamReader._header_parsed">
+<span class="sig-name descname"><span class="pre">_header_parsed</span></span><a class="headerlink" href="#biodatareader.sam_reader.SamReader._header_parsed" title="Ссылка на это определение"></a></dt>
+<dd><p>Флаг, указывающий, был ли уже распарсен заголовок.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.sam_reader.SamReader.header">
+<span class="sig-name descname"><span class="pre">header</span></span><a class="headerlink" href="#biodatareader.sam_reader.SamReader.header" title="Ссылка на это определение"></a></dt>
+<dd><p>Словарь заголовков, где ключ — тег (например, <a class="reference external" href="mailto:'&#37;&#52;&#48;SQ">„<span>&#64;</span>SQ</a>“),
+значение — список строк содержимого без тега.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Dict[str, List[str]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.sam_reader.SamReader.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/sam_reader.html#SamReader.__init__"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.sam_reader.SamReader.__init__" title="Ссылка на это определение"></a></dt>
+<dd><p>Инициализирует SamReader с указанным путём к файлу.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em><em> | </em><em>Path</em>) – Путь к SAM-файлу.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.sam_reader.SamReader.get_header">
+<span class="sig-name descname"><span class="pre">get_header</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/sam_reader.html#SamReader.get_header"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.sam_reader.SamReader.get_header" title="Ссылка на это определение"></a></dt>
+<dd><p>Возвращает все заголовки SAM-файла в виде словаря.</p>
+<p>Гарантирует, что заголовок был распарсен перед возвратом.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Результат<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Словарь, где ключи — теги заголовков (например, <a class="reference external" href="mailto:'&#37;&#52;&#48;SQ">„<span>&#64;</span>SQ</a>“),
+значения — списки строк содержимого (без тега).</p>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p>Dict[str, List[str]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.sam_reader.SamReader.get_header_group">
+<span class="sig-name descname"><span class="pre">get_header_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_tag</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/sam_reader.html#SamReader.get_header_group"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.sam_reader.SamReader.get_header_group" title="Ссылка на это определение"></a></dt>
+<dd><p>Возвращает список записей для указанной группы заголовков.</p>
+<p>Например, <a class="reference external" href="mailto:'&#37;&#52;&#48;SQ">„<span>&#64;</span>SQ</a>“ для информации о последовательностях или <a class="reference external" href="mailto:'&#37;&#52;&#48;RG">„<span>&#64;</span>RG</a>“ для групп ридов.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>group_tag</strong> (<em>str</em>) – Тег заголовочной группы (например, <a class="reference external" href="mailto:'&#37;&#52;&#48;SQ">„<span>&#64;</span>SQ</a>“, <a class="reference external" href="mailto:'&#37;&#52;&#48;PG">„<span>&#64;</span>PG</a>“).</p>
+</dd>
+<dt class="field-even">Результат<span class="colon">:</span></dt>
+<dd class="field-even"><p>Список строк содержимого для данной группы. Пустой список,
+если группа отсутствует.</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p>List[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.sam_reader.SamReader.read">
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/sam_reader.html#SamReader.read"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.sam_reader.SamReader.read" title="Ссылка на это определение"></a></dt>
+<dd><p>Итеративно читает выравнивания из SAM-файла и возвращает объекты AlignmentRecord.</p>
+<p>Пропускает заголовочные строки и некорректные записи (менее 11 полей или „*“
+в поле RNAME). Вычисляет конечную позицию выравнивания на основе CIGAR.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Yields<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>AlignmentRecord</em> – Объект выравнивания с заполненными атрибутами.</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<p>Метод сбрасывает файловый указатель в начало перед чтением.</p>
+</div>
+<dl class="field-list simple">
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code>[<a class="reference internal" href="biodatareader.record.html#biodatareader.record.AlignmentRecord" title="biodatareader.record.AlignmentRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlignmentRecord</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.sam_reader.SamReader.count_alignments">
+<span class="sig-name descname"><span class="pre">count_alignments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/sam_reader.html#SamReader.count_alignments"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.sam_reader.SamReader.count_alignments" title="Ссылка на это определение"></a></dt>
+<dd><p>Подсчитывает общее количество валидных выравниваний в SAM-файле.</p>
+<p>Пропускает заголовки и строки с „*“ в поле RNAME или менее чем 11 полями.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Результат<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Количество валидных выравниваний.</p>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<p>Метод сбрасывает файловый указатель в начало после подсчёта.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.sam_reader.SamReader.stats_by_chromosome">
+<span class="sig-name descname"><span class="pre">stats_by_chromosome</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/sam_reader.html#SamReader.stats_by_chromosome"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.sam_reader.SamReader.stats_by_chromosome" title="Ссылка на это определение"></a></dt>
+<dd><p>Собирает статистику количества выравниваний по хромосомам.</p>
+<p>Возвращает pandas DataFrame с двумя колонками: „chrom“ и „count“.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Результат<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Таблица с количеством выравниваний на каждую хромосому.
+Если выравниваний нет, возвращает пустой DataFrame с указанными колонками.</p>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p>pd.DataFrame</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<p>Метод сбрасывает файловый указатель в начало после сбора статистики.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.sam_reader.SamReader.filter_by_region">
+<span class="sig-name descname"><span class="pre">filter_by_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">chrom</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/sam_reader.html#SamReader.filter_by_region"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.sam_reader.SamReader.filter_by_region" title="Ссылка на это определение"></a></dt>
+<dd><p>Фильтрует выравнивания по заданному геномному региону.</p>
+<p>Возвращает итератор по выравниваниям, перекрывающим регион [start, end]
+на указанной хромосоме (включительно, 1-based или 0-based — зависит от данных,
+но сравнение выполняется как числовое перекрытие).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>chrom</strong> (<em>str</em>) – Название хромосомы (например, „chr1“).</p></li>
+<li><p><strong>start</strong> (<em>int</em>) – Начало региона (включительно).</p></li>
+<li><p><strong>end</strong> (<em>int</em>) – Конец региона (включительно).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Yields<span class="colon">:</span></dt>
+<dd class="field-even"><p><em>AlignmentRecord</em> – Выравнивания, перекрывающие указанный регион.</p>
+</dd>
+<dt class="field-odd">Исключение<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – Если start &gt; end.</p>
+</dd>
+<dt class="field-even">Тип результата<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code>[<a class="reference internal" href="biodatareader.record.html#biodatareader.record.AlignmentRecord" title="biodatareader.record.AlignmentRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">AlignmentRecord</span></code></a>]</span></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Примечание</p>
+<p>Метод сбрасывает файловый указатель в начало после завершения итерации.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="biodatareader.run_vcf.html" class="btn btn-neutral float-left" title="biodatareader.run_vcf" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="biodatareader.vcf_reader.html" class="btn btn-neutral float-right" title="biodatareader.vcf_reader" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Авторские права 2025, BioBoba team. </p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

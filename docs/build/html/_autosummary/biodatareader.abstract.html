@@ -1,0 +1,371 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>biodatareader.abstract &mdash; документация BioDataReader v1.0.0</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=18e4fad8"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../_static/translations.js?v=cd1d70c9"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../genindex.html" />
+    <link rel="search" title="Поиск" href="../search.html" />
+    <link rel="next" title="biodatareader.analyze_fastq" href="biodatareader.analyze_fastq.html" />
+    <link rel="prev" title="API Reference" href="../api.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            BioDataReader
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../api.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">biodatareader.abstract</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#biodatareader.abstract.Reader"><code class="docutils literal notranslate"><span class="pre">Reader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.abstract.Reader.filepath"><code class="docutils literal notranslate"><span class="pre">Reader.filepath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.abstract.Reader.file"><code class="docutils literal notranslate"><span class="pre">Reader.file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.abstract.Reader.__init__"><code class="docutils literal notranslate"><span class="pre">Reader.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.abstract.Reader.read"><code class="docutils literal notranslate"><span class="pre">Reader.read()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.abstract.Reader.close"><code class="docutils literal notranslate"><span class="pre">Reader.close()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#biodatareader.abstract.SequenceReader"><code class="docutils literal notranslate"><span class="pre">SequenceReader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.abstract.SequenceReader.filepath"><code class="docutils literal notranslate"><span class="pre">SequenceReader.filepath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.abstract.SequenceReader.file"><code class="docutils literal notranslate"><span class="pre">SequenceReader.file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.abstract.SequenceReader.__init__"><code class="docutils literal notranslate"><span class="pre">SequenceReader.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.abstract.SequenceReader.read"><code class="docutils literal notranslate"><span class="pre">SequenceReader.read()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#biodatareader.abstract.GenomicDataReader"><code class="docutils literal notranslate"><span class="pre">GenomicDataReader</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.abstract.GenomicDataReader.filepath"><code class="docutils literal notranslate"><span class="pre">GenomicDataReader.filepath</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.abstract.GenomicDataReader.file"><code class="docutils literal notranslate"><span class="pre">GenomicDataReader.file</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.abstract.GenomicDataReader._header_parsed"><code class="docutils literal notranslate"><span class="pre">GenomicDataReader._header_parsed</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.abstract.GenomicDataReader.__init__"><code class="docutils literal notranslate"><span class="pre">GenomicDataReader.__init__()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.abstract.GenomicDataReader.read"><code class="docutils literal notranslate"><span class="pre">GenomicDataReader.read()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#biodatareader.abstract.GenomicDataReader.close"><code class="docutils literal notranslate"><span class="pre">GenomicDataReader.close()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.analyze_fastq.html">biodatareader.analyze_fastq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.fasta_reader.html">biodatareader.fasta_reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.fastq_reader.html">biodatareader.fastq_reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.record.html">biodatareader.record</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.run_fasta.html">biodatareader.run_fasta</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.run_fastq.html">biodatareader.run_fastq</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.run_sam.html">biodatareader.run_sam</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.run_vcf.html">biodatareader.run_vcf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.sam_reader.html">biodatareader.sam_reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="biodatareader.vcf_reader.html">biodatareader.vcf_reader</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">BioDataReader</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../api.html">API Reference</a></li>
+      <li class="breadcrumb-item active">biodatareader.abstract</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/biodatareader.abstract.rst.txt" rel="nofollow"> Просмотреть исходный код страницы</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-biodatareader.abstract">
+<span id="biodatareader-abstract"></span><h1>biodatareader.abstract<a class="headerlink" href="#module-biodatareader.abstract" title="Ссылка на этот заголовок"></a></h1>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#biodatareader.abstract.GenomicDataReader" title="biodatareader.abstract.GenomicDataReader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GenomicDataReader</span></code></a>(filepath)</p></td>
+<td><p>Абстрактный класс для чтения геномных данных с заголовком (например, SAM, VCF).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#biodatareader.abstract.Reader" title="biodatareader.abstract.Reader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Reader</span></code></a>(filepath)</p></td>
+<td><p>Абстрактный базовый класс для чтения биологических данных из файлов.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#biodatareader.abstract.SequenceReader" title="biodatareader.abstract.SequenceReader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SequenceReader</span></code></a>(filepath)</p></td>
+<td><p>Абстрактный класс для чтения последовательностей (например, FASTA или FASTQ).</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py class">
+<dt class="sig sig-object py" id="biodatareader.abstract.Reader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">biodatareader.abstract.</span></span><span class="sig-name descname"><span class="pre">Reader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/abstract.html#Reader"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.abstract.Reader" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Абстрактный базовый класс для чтения биологических данных из файлов.</p>
+<p>Предоставляет общий интерфейс и базовую логику открытия/закрытия файлов,
+а также поддержку контекстного менеджера (with-блоков).</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.abstract.Reader.filepath">
+<span class="sig-name descname"><span class="pre">filepath</span></span><a class="headerlink" href="#biodatareader.abstract.Reader.filepath" title="Ссылка на это определение"></a></dt>
+<dd><p>Путь к файлу, из которого будут читаться данные.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.abstract.Reader.file">
+<span class="sig-name descname"><span class="pre">file</span></span><a class="headerlink" href="#biodatareader.abstract.Reader.file" title="Ссылка на это определение"></a></dt>
+<dd><p>Открытый файловый дескриптор или None, если файл закрыт.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>file object or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.abstract.Reader.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/abstract.html#Reader.__init__"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.abstract.Reader.__init__" title="Ссылка на это определение"></a></dt>
+<dd><p>Инициализирует Reader с указанным путём к файлу.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em><em> | </em><em>Path</em>) – Путь к файлу в виде строки или объекта pathlib.Path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.abstract.Reader.read">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/abstract.html#Reader.read"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.abstract.Reader.read" title="Ссылка на это определение"></a></dt>
+<dd><p>Абстрактный метод для чтения записей из файла.</p>
+<p>Должен быть реализован в подклассах. Возвращает итератор по объектам типа Record,
+представляющим биологические данные (например, последовательности, выравнивания или варианты).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Yields<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>Record</em> – Объект записи, содержащий данные из файла.</p>
+</dd>
+<dt class="field-even">Исключение<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – Если метод не переопределён в подклассе.</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code>[<a class="reference internal" href="biodatareader.record.html#biodatareader.record.Record" title="biodatareader.record.Record"><code class="xref py py-class docutils literal notranslate"><span class="pre">Record</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.abstract.Reader.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/abstract.html#Reader.close"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.abstract.Reader.close" title="Ссылка на это определение"></a></dt>
+<dd><p>Закрывает открытый файл, если он ещё не закрыт.</p>
+<p>Устанавливает атрибут self.file в None после закрытия.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="biodatareader.abstract.SequenceReader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">biodatareader.abstract.</span></span><span class="sig-name descname"><span class="pre">SequenceReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/abstract.html#SequenceReader"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.abstract.SequenceReader" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <a class="reference internal" href="#biodatareader.abstract.Reader" title="biodatareader.abstract.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></p>
+<p>Абстрактный класс для чтения последовательностей (например, FASTA или FASTQ).</p>
+<p>Наследуется от Reader и специализируется на работе с SequenceRecord.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.abstract.SequenceReader.filepath">
+<span class="sig-name descname"><span class="pre">filepath</span></span><a class="headerlink" href="#biodatareader.abstract.SequenceReader.filepath" title="Ссылка на это определение"></a></dt>
+<dd><p>Путь к файлу с последовательностями.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.abstract.SequenceReader.file">
+<span class="sig-name descname"><span class="pre">file</span></span><a class="headerlink" href="#biodatareader.abstract.SequenceReader.file" title="Ссылка на это определение"></a></dt>
+<dd><p>Открытый файловый дескриптор.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>file object or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.abstract.SequenceReader.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/abstract.html#SequenceReader.__init__"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.abstract.SequenceReader.__init__" title="Ссылка на это определение"></a></dt>
+<dd><p>Инициализирует SequenceReader с указанным путём к файлу.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em><em> | </em><em>Path</em>) – Путь к файлу в виде строки или объекта pathlib.Path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.abstract.SequenceReader.read">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/abstract.html#SequenceReader.read"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.abstract.SequenceReader.read" title="Ссылка на это определение"></a></dt>
+<dd><p>Абстрактный метод для чтения последовательностей из файла.</p>
+<p>Должен возвращать итератор по объектам SequenceRecord,
+каждый из которых содержит идентификатор, последовательность и, возможно, качество (для FASTQ).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Yields<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>SequenceRecord</em> – Объект, представляющий одну биологическую последовательность.</p>
+</dd>
+<dt class="field-even">Исключение<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – Если метод не реализован в подклассе.</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code>[<a class="reference internal" href="biodatareader.record.html#biodatareader.record.SequenceRecord" title="biodatareader.record.SequenceRecord"><code class="xref py py-class docutils literal notranslate"><span class="pre">SequenceRecord</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="biodatareader.abstract.GenomicDataReader">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">biodatareader.abstract.</span></span><span class="sig-name descname"><span class="pre">GenomicDataReader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/abstract.html#GenomicDataReader"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.abstract.GenomicDataReader" title="Ссылка на это определение"></a></dt>
+<dd><p>Базовые классы: <a class="reference internal" href="#biodatareader.abstract.Reader" title="biodatareader.abstract.Reader"><code class="xref py py-class docutils literal notranslate"><span class="pre">Reader</span></code></a></p>
+<p>Абстрактный класс для чтения геномных данных с заголовком (например, SAM, VCF).</p>
+<p>Поддерживает парсинг заголовка при открытии файла и чтение записей после заголовка.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.abstract.GenomicDataReader.filepath">
+<span class="sig-name descname"><span class="pre">filepath</span></span><a class="headerlink" href="#biodatareader.abstract.GenomicDataReader.filepath" title="Ссылка на это определение"></a></dt>
+<dd><p>Путь к геномному файлу.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.abstract.GenomicDataReader.file">
+<span class="sig-name descname"><span class="pre">file</span></span><a class="headerlink" href="#biodatareader.abstract.GenomicDataReader.file" title="Ссылка на это определение"></a></dt>
+<dd><p>Открытый файловый дескриптор.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>file object or None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="biodatareader.abstract.GenomicDataReader._header_parsed">
+<span class="sig-name descname"><span class="pre">_header_parsed</span></span><a class="headerlink" href="#biodatareader.abstract.GenomicDataReader._header_parsed" title="Ссылка на это определение"></a></dt>
+<dd><p>Флаг, указывающий, был ли уже распарсен заголовок.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.abstract.GenomicDataReader.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/abstract.html#GenomicDataReader.__init__"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.abstract.GenomicDataReader.__init__" title="Ссылка на это определение"></a></dt>
+<dd><p>Инициализирует GenomicDataReader с указанным путём к файлу.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Параметры<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filepath</strong> (<em>str</em><em> | </em><em>Path</em>) – Путь к файлу в виде строки или объекта pathlib.Path.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.abstract.GenomicDataReader.read">
+<em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/abstract.html#GenomicDataReader.read"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.abstract.GenomicDataReader.read" title="Ссылка на это определение"></a></dt>
+<dd><p>Чтение записей из файла после заголовка.</p>
+<p>Пропускает заголовочные строки и возвращает итератор по объектам Record,
+представляющим строки данных (например, выравнивания в SAM или варианты в VCF).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Yields<span class="colon">:</span></dt>
+<dd class="field-odd"><p><em>Record</em> – Объект записи геномных данных.</p>
+</dd>
+<dt class="field-even">Исключение<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>NotImplementedError</strong> – Если метод не реализован в подклассе.</p>
+</dd>
+<dt class="field-odd">Тип результата<span class="colon">:</span></dt>
+<dd class="field-odd"><p><span class="sphinx_autodoc_typehints-type"><code class="xref py py-class docutils literal notranslate"><span class="pre">Iterator</span></code>[<a class="reference internal" href="biodatareader.record.html#biodatareader.record.Record" title="biodatareader.record.Record"><code class="xref py py-class docutils literal notranslate"><span class="pre">Record</span></code></a>]</span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="biodatareader.abstract.GenomicDataReader.close">
+<span class="sig-name descname"><span class="pre">close</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/biodatareader/abstract.html#GenomicDataReader.close"><span class="viewcode-link"><span class="pre">[исходный</span> <span class="pre">код]</span></span></a><a class="headerlink" href="#biodatareader.abstract.GenomicDataReader.close" title="Ссылка на это определение"></a></dt>
+<dd><p>Закрывает файл и сбрасывает флаг парсинга заголовка.</p>
+<p>Вызывает родительский метод close() и дополнительно устанавливает
+_header_parsed в False для корректного состояния объекта после закрытия.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Нижняя область">
+        <a href="../api.html" class="btn btn-neutral float-left" title="API Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Предыдущая</a>
+        <a href="biodatareader.analyze_fastq.html" class="btn btn-neutral float-right" title="biodatareader.analyze_fastq" accesskey="n" rel="next">Следующая <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Авторские права 2025, BioBoba team. </p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

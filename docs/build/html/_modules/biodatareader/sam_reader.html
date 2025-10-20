@@ -1,0 +1,374 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>biodatareader.sam_reader &mdash; документация BioDataReader v1.0.0</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=18e4fad8"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=cd1d70c9"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            BioDataReader
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BioDataReader</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Код модуля</a></li>
+      <li class="breadcrumb-item active">biodatareader.sam_reader</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Исходный код biodatareader.sam_reader</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">Counter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.abstract</span><span class="w"> </span><span class="kn">import</span> <span class="n">GenomicDataReader</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.record</span><span class="w"> </span><span class="kn">import</span> <span class="n">AlignmentRecord</span>
+
+
+<div class="viewcode-block" id="SamReader">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.sam_reader.html#biodatareader.sam_reader.SamReader">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SamReader</span><span class="p">(</span><span class="n">GenomicDataReader</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Реализация ридера для чтения SAM-файлов (Sequence Alignment/Map).</span>
+
+<span class="sd">    Поддерживает:</span>
+<span class="sd">        - Парсинг заголовков (строки, начинающиеся с &#39;@&#39;).</span>
+<span class="sd">        - Итеративное чтение выравниваний как объектов AlignmentRecord.</span>
+<span class="sd">        - Подсчёт общего числа выравниваний.</span>
+<span class="sd">        - Сбор статистики по хромосомам с использованием pandas.</span>
+<span class="sd">        - Фильтрацию выравниваний по геномному региону.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        filepath (Path): Путь к SAM-файлу.</span>
+<span class="sd">        file (file object or None): Открытый файловый дескриптор.</span>
+<span class="sd">        _header_parsed (bool): Флаг, указывающий, был ли уже распарсен заголовок.</span>
+<span class="sd">        header (Dict[str, List[str]]): Словарь заголовков, где ключ — тег (например, &#39;@SQ&#39;),</span>
+<span class="sd">            значение — список строк содержимого без тега.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SamReader.__init__">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.sam_reader.html#biodatareader.sam_reader.SamReader.__init__">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filepath</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="n">Path</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Инициализирует SamReader с указанным путём к файлу.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            filepath (str | Path): Путь к SAM-файлу.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_header_parsed</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="p">:</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{}</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_header_parsed</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Гарантирует, что заголовок был распарсен.</span>
+
+<span class="sd">        Если парсинг ещё не выполнялся, вызывает _parse_header() и устанавливает флаг.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_header_parsed</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parse_header</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_header_parsed</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_header</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Читает и парсит заголовочные строки SAM-файла.</span>
+
+<span class="sd">        Перемещает файловый указатель в начало, читает строки до первой</span>
+<span class="sd">        незаголовочной (не начинающейся с &#39;@&#39;), сохраняя заголовки в self.header.</span>
+<span class="sd">        После завершения возвращает указатель в начало файла.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">):</span>
+                <span class="k">break</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_parse_header_line</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_header_line</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Парсит одну заголовочную строку и сохраняет её в self.header.</span>
+
+<span class="sd">        Разделяет строку по табуляции, первый элемент — тег (например, &#39;@SQ&#39;),</span>
+<span class="sd">        остальные — содержимое. Тег используется как ключ в словаре header.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            line (str): Одна строка из SAM-файла, начинающаяся с &#39;@&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">parts</span><span class="p">:</span>
+            <span class="n">tag</span> <span class="o">=</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">tag</span><span class="p">,</span> <span class="p">[])</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))</span>
+
+<div class="viewcode-block" id="SamReader.get_header">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.sam_reader.html#biodatareader.sam_reader.SamReader.get_header">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_header</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Возвращает все заголовки SAM-файла в виде словаря.</span>
+
+<span class="sd">        Гарантирует, что заголовок был распарсен перед возвратом.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            Dict[str, List[str]]: Словарь, где ключи — теги заголовков (например, &#39;@SQ&#39;),</span>
+<span class="sd">            значения — списки строк содержимого (без тега).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_header_parsed</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span></div>
+
+
+<div class="viewcode-block" id="SamReader.get_header_group">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.sam_reader.html#biodatareader.sam_reader.SamReader.get_header_group">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_header_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_tag</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Возвращает список записей для указанной группы заголовков.</span>
+
+<span class="sd">        Например, &#39;@SQ&#39; для информации о последовательностях или &#39;@RG&#39; для групп ридов.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            group_tag (str): Тег заголовочной группы (например, &#39;@SQ&#39;, &#39;@PG&#39;).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            List[str]: Список строк содержимого для данной группы. Пустой список,</span>
+<span class="sd">            если группа отсутствует.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_header_parsed</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">header</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">group_tag</span><span class="p">,</span> <span class="p">[])</span></div>
+
+
+<div class="viewcode-block" id="SamReader.read">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.sam_reader.html#biodatareader.sam_reader.SamReader.read">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">AlignmentRecord</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Итеративно читает выравнивания из SAM-файла и возвращает объекты AlignmentRecord.</span>
+
+<span class="sd">        Пропускает заголовочные строки и некорректные записи (менее 11 полей или &#39;*&#39;</span>
+<span class="sd">        в поле RNAME). Вычисляет конечную позицию выравнивания на основе CIGAR.</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            AlignmentRecord: Объект выравнивания с заполненными атрибутами.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            Метод сбрасывает файловый указатель в начало перед чтением.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">11</span> <span class="ow">or</span> <span class="n">fields</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">qname</span><span class="p">,</span> <span class="n">flag</span><span class="p">,</span> <span class="n">rname</span><span class="p">,</span> <span class="n">pos</span><span class="p">,</span> <span class="n">mapq</span><span class="p">,</span> <span class="n">cigar</span> <span class="o">=</span> <span class="n">fields</span><span class="p">[:</span><span class="mi">6</span><span class="p">]</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">pos_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">pos</span><span class="p">)</span>
+                <span class="n">mapq_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">mapq</span><span class="p">)</span> <span class="k">if</span> <span class="n">mapq</span> <span class="o">!=</span> <span class="s2">&quot;*&quot;</span> <span class="k">else</span> <span class="mi">0</span>
+                <span class="n">flag_int</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">flag</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="k">continue</span>
+
+            <span class="n">aligned_len</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_calc_aligned_length</span><span class="p">(</span><span class="n">cigar</span><span class="p">)</span>
+            <span class="n">end_pos</span> <span class="o">=</span> <span class="n">pos_int</span> <span class="o">+</span> <span class="n">aligned_len</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">if</span> <span class="n">aligned_len</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">else</span> <span class="n">pos_int</span>
+
+            <span class="n">rec</span> <span class="o">=</span> <span class="n">AlignmentRecord</span><span class="p">(</span>
+                <span class="nb">id</span><span class="o">=</span><span class="n">qname</span><span class="p">,</span> <span class="n">chrom</span><span class="o">=</span><span class="n">rname</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">pos_int</span><span class="p">,</span> <span class="n">cigar</span><span class="o">=</span><span class="n">cigar</span><span class="p">,</span> <span class="n">mapq</span><span class="o">=</span><span class="n">mapq_int</span>
+            <span class="p">)</span>
+            <span class="n">rec</span><span class="o">.</span><span class="n">flag</span> <span class="o">=</span> <span class="n">flag_int</span>
+            <span class="n">rec</span><span class="o">.</span><span class="n">end</span> <span class="o">=</span> <span class="n">end_pos</span>
+            <span class="k">yield</span> <span class="n">rec</span></div>
+
+
+    <span class="nd">@staticmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_calc_aligned_length</span><span class="p">(</span><span class="n">cigar</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Вычисляет длину выравнивания на референсе по CIGAR-строке.</span>
+
+<span class="sd">        Учитывает операции, которые &quot;потребляют&quot; референс: M, D, N, =, X.</span>
+<span class="sd">        Игнорирует операции вставок (I), мягких (S) и жёстких (H) клипов и др.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            cigar (str): CIGAR-строка (например, &quot;100M2D30M&quot;).</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Длина выравнивания в позициях референса.</span>
+
+<span class="sd">        Example:</span>
+<span class="sd">            &gt;&gt;&gt; SamReader._calc_aligned_length(&quot;50M10D20M&quot;)</span>
+<span class="sd">            80</span>
+<span class="sd">            &gt;&gt;&gt; SamReader._calc_aligned_length(&quot;30I&quot;)  # только вставка — не влияет на референс</span>
+<span class="sd">            0</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">cigar</span> <span class="ow">or</span> <span class="n">cigar</span> <span class="o">==</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mi">0</span>
+        <span class="k">return</span> <span class="nb">sum</span><span class="p">(</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">length</span><span class="p">)</span> <span class="k">for</span> <span class="n">length</span><span class="p">,</span> <span class="n">op</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(\d+)([MIDNSHP=X])&quot;</span><span class="p">,</span> <span class="n">cigar</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">op</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;M&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;N&quot;</span><span class="p">,</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="s2">&quot;X&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="SamReader.count_alignments">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.sam_reader.html#biodatareader.sam_reader.SamReader.count_alignments">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">count_alignments</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Подсчитывает общее количество валидных выравниваний в SAM-файле.</span>
+
+<span class="sd">        Пропускает заголовки и строки с &#39;*&#39; в поле RNAME или менее чем 11 полями.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Количество валидных выравниваний.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            Метод сбрасывает файловый указатель в начало после подсчёта.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;@&quot;</span><span class="p">):</span>
+                <span class="k">continue</span>
+            <span class="n">fields</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">11</span> <span class="ow">and</span> <span class="n">fields</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&quot;*&quot;</span><span class="p">:</span>
+                <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">count</span></div>
+
+
+<div class="viewcode-block" id="SamReader.stats_by_chromosome">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.sam_reader.html#biodatareader.sam_reader.SamReader.stats_by_chromosome">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">stats_by_chromosome</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Собирает статистику количества выравниваний по хромосомам.</span>
+
+<span class="sd">        Возвращает pandas DataFrame с двумя колонками: &#39;chrom&#39; и &#39;count&#39;.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: Таблица с количеством выравниваний на каждую хромосому.</span>
+<span class="sd">            Если выравниваний нет, возвращает пустой DataFrame с указанными колонками.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            Метод сбрасывает файловый указатель в начало после сбора статистики.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">chrom_counts</span> <span class="o">=</span> <span class="n">Counter</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">rec</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">read</span><span class="p">():</span>
+            <span class="n">chrom_counts</span><span class="p">[</span><span class="n">rec</span><span class="o">.</span><span class="n">chrom</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">chrom_counts</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;chrom&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">chrom_counts</span><span class="o">.</span><span class="n">items</span><span class="p">()),</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;chrom&quot;</span><span class="p">,</span> <span class="s2">&quot;count&quot;</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="SamReader.filter_by_region">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.sam_reader.html#biodatareader.sam_reader.SamReader.filter_by_region">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter_by_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chrom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">end</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">AlignmentRecord</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Фильтрует выравнивания по заданному геномному региону.</span>
+
+<span class="sd">        Возвращает итератор по выравниваниям, перекрывающим регион [start, end]</span>
+<span class="sd">        на указанной хромосоме (включительно, 1-based или 0-based — зависит от данных,</span>
+<span class="sd">        но сравнение выполняется как числовое перекрытие).</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            chrom (str): Название хромосомы (например, &#39;chr1&#39;).</span>
+<span class="sd">            start (int): Начало региона (включительно).</span>
+<span class="sd">            end (int): Конец региона (включительно).</span>
+
+<span class="sd">        Yields:</span>
+<span class="sd">            AlignmentRecord: Выравнивания, перекрывающие указанный регион.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: Если start &gt; end.</span>
+
+<span class="sd">        Note:</span>
+<span class="sd">            Метод сбрасывает файловый указатель в начало после завершения итерации.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">start</span> <span class="o">&gt;</span> <span class="n">end</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;start must be &lt;= end&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">rec</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">read</span><span class="p">():</span>
+            <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">chrom</span> <span class="o">==</span> <span class="n">chrom</span> <span class="ow">and</span> <span class="n">rec</span><span class="o">.</span><span class="n">start</span> <span class="o">&lt;=</span> <span class="n">end</span> <span class="ow">and</span> <span class="n">rec</span><span class="o">.</span><span class="n">end</span> <span class="o">&gt;=</span> <span class="n">start</span><span class="p">:</span>
+                <span class="k">yield</span> <span class="n">rec</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Авторские права 2025, BioBoba team. </p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
