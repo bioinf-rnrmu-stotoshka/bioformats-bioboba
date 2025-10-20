@@ -279,3 +279,5 @@ make html # для Windows - ./make html
 ## Лицензия
 
 Этот проект распространяется под лицензией MIT.
+
+!(/images/cotic.png)
