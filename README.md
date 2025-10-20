@@ -280,4 +280,4 @@ make html # для Windows - ./make html
 
 Этот проект распространяется под лицензией MIT.
 
-!(/images/cotic.png)
+!(UML_diagramm.png)
