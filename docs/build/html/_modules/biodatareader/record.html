@@ -1,0 +1,276 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="ru" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>biodatareader.record &mdash; документация BioDataReader v1.0.0</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=18e4fad8"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/translations.js?v=cd1d70c9"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Алфавитный указатель" href="../../genindex.html" />
+    <link rel="search" title="Поиск" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            BioDataReader
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Поиск в документации" aria-label="Поиск в документации" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Меню навигации">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Меню навигации для мобильных устройств" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">BioDataReader</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Навигация по страницам">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Код модуля</a></li>
+      <li class="breadcrumb-item active">biodatareader.record</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Исходный код biodatareader.record</h1><div class="highlight"><pre>
+<div class="viewcode-block" id="Record">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.record.html#biodatareader.record.Record">[документация]</a>
+<span></span><span class="k">class</span><span class="w"> </span><span class="nc">Record</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Базовый класс для представления биологических записей.</span>
+
+<span class="sd">    Содержит общий идентификатор записи, который может использоваться</span>
+<span class="sd">    в различных форматах (FASTA, FASTQ, SAM, VCF и др.).</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        id (str): Уникальный идентификатор записи (например, имя последовательности или координата).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="Record.__init__">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.record.html#biodatareader.record.Record.__init__">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Инициализирует базовую запись с заданным идентификатором.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            id (str): Идентификатор биологической записи.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="nb">id</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Возвращает строковое представление объекта для отладки.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Строка вида &quot;&lt;Record id=...&gt;&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;Record id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">&gt;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="SequenceRecord">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.record.html#biodatareader.record.SequenceRecord">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">SequenceRecord</span><span class="p">(</span><span class="n">Record</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Класс для представления последовательностей нуклеотидов или аминокислот.</span>
+
+<span class="sd">    Используется для хранения данных из FASTA (без качества) и FASTQ (с качеством).</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        id (str): Идентификатор последовательности.</span>
+<span class="sd">        sequence (str): Биологическая последовательность (например, &quot;ATGCGTA&quot;).</span>
+<span class="sd">        quality (list[int] | None): Список Phred-оценок качества для каждой позиции</span>
+<span class="sd">            (только для FASTQ). Для FASTA — None.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SequenceRecord.__init__">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.record.html#biodatareader.record.SequenceRecord.__init__">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">sequence</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">quality</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Инициализирует запись последовательности.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            id (str): Идентификатор последовательности.</span>
+<span class="sd">            sequence (str): Строка последовательности (обычно в верхнем регистре).</span>
+<span class="sd">            quality (list[int] | None, optional): Список целочисленных оценок качества.</span>
+<span class="sd">                По умолчанию None (для FASTA).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sequence</span> <span class="o">=</span> <span class="n">sequence</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">quality</span> <span class="o">=</span> <span class="n">quality</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="AlignmentRecord">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.record.html#biodatareader.record.AlignmentRecord">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">AlignmentRecord</span><span class="p">(</span><span class="n">Record</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Класс для представления выравнивания рида на референсный геном (формат SAM/BAM).</span>
+
+<span class="sd">    Хранит информацию о положении, качестве и параметрах выравнивания.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        id (str): Идентификатор рида (QNAME в SAM).</span>
+<span class="sd">        chrom (str): Название хромосомы или референсной последовательности (RNAME).</span>
+<span class="sd">        start (int): Начальная позиция выравнивания (1-based или 0-based в зависимости от контекста;</span>
+<span class="sd">            здесь используется 0-based для внутренней логики).</span>
+<span class="sd">        end (int): Конечная позиция выравнивания (вычисляется на основе CIGAR, по умолчанию = start).</span>
+<span class="sd">        cigar (str): Строка CIGAR, описывающая операции выравнивания (например, &quot;100M&quot;).</span>
+<span class="sd">        mapq (int): Качество отображения (MAPQ), целое число от 0 до 255.</span>
+<span class="sd">        flag (int): Флаг выравнивания (битовое поле, по умолчанию 0).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="AlignmentRecord.__init__">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.record.html#biodatareader.record.AlignmentRecord.__init__">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">chrom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">start</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">cigar</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">mapq</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Инициализирует запись выравнивания.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            id (str): Идентификатор рида.</span>
+<span class="sd">            chrom (str): Название хромосомы или референса.</span>
+<span class="sd">            start (int): Начальная позиция выравнивания (обычно 0-based).</span>
+<span class="sd">            cigar (str): CIGAR-строка (например, &quot;50M2D30M&quot;).</span>
+<span class="sd">            mapq (int): Качество отображения (MAPQ score).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="nb">id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chrom</span> <span class="o">=</span> <span class="n">chrom</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="n">start</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cigar</span> <span class="o">=</span> <span class="n">cigar</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mapq</span> <span class="o">=</span> <span class="n">mapq</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">start</span>  <span class="c1"># Может быть обновлено позже на основе CIGAR</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">flag</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>     <span class="c1"># Может быть установлен при парсинге SAM</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Возвращает строковое представление объекта выравнивания.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Строка вида &quot;&lt;AlignmentRecord id=..., chrom:start-end, MAPQ=..., FLAG=...&gt;&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;&lt;AlignmentRecord id=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chrom</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">start</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">end</span><span class="si">}</span><span class="s2">, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;MAPQ=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">mapq</span><span class="si">}</span><span class="s2">, FLAG=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">flag</span><span class="si">}</span><span class="s2">&gt;&quot;</span>
+        <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="VariantRecord">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.record.html#biodatareader.record.VariantRecord">[документация]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">VariantRecord</span><span class="p">(</span><span class="n">Record</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Класс для представления генетического варианта (формат VCF).</span>
+
+<span class="sd">    Хранит информацию о положении, референсном и альтернативном аллелях,</span>
+<span class="sd">    а также дополнительных аннотациях.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        id (str): Идентификатор вида &quot;chrom:pos&quot; (например, &quot;chr1:12345&quot;).</span>
+<span class="sd">        chrom (str): Название хромосомы.</span>
+<span class="sd">        pos (int): Позиция варианта (1-based, как в VCF).</span>
+<span class="sd">        ref (str): Референсный аллель (например, &quot;A&quot;).</span>
+<span class="sd">        alt (str): Альтернативный аллель (например, &quot;T&quot;).</span>
+<span class="sd">        info (dict): Словарь с дополнительной информацией из поля INFO VCF</span>
+<span class="sd">            (например, {&quot;DP&quot;: 30, &quot;AF&quot;: 0.5}).</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="VariantRecord.__init__">
+<a class="viewcode-back" href="../../_autosummary/biodatareader.record.html#biodatareader.record.VariantRecord.__init__">[документация]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">chrom</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">pos</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">ref</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">alt</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">info</span><span class="p">:</span> <span class="nb">dict</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Инициализирует запись генетического варианта.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            chrom (str): Название хромосомы (например, &quot;chr1&quot;).</span>
+<span class="sd">            pos (int): Позиция варианта (1-based, как в спецификации VCF).</span>
+<span class="sd">            ref (str): Референсный аллель.</span>
+<span class="sd">            alt (str): Альтернативный аллель.</span>
+<span class="sd">            info (dict): Словарь с аннотациями из поля INFO.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">chrom</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">pos</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">chrom</span> <span class="o">=</span> <span class="n">chrom</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pos</span> <span class="o">=</span> <span class="n">pos</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ref</span> <span class="o">=</span> <span class="n">ref</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">alt</span> <span class="o">=</span> <span class="n">alt</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">info</span> <span class="o">=</span> <span class="n">info</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Возвращает строковое представление объекта варианта.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: Строка вида &quot;&lt;VariantRecord chrom:pos ref&gt;alt&gt;&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;&lt;VariantRecord </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">chrom</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pos</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ref</span><span class="si">}</span><span class="s2">&gt;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">alt</span><span class="si">}</span><span class="s2">&gt;&quot;</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Авторские права 2025, BioBoba team. </p>
+  </div>
+
+  Собрано при помощи <a href="https://www.sphinx-doc.org/">Sphinx</a> с использованием
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">темы,</a>
+    предоставленной <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
